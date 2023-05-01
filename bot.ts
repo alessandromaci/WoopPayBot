@@ -1,7 +1,8 @@
-import { Bot, InlineKeyboard } from "grammy";
+import { Bot, InlineKeyboard, webhookCallback } from "grammy";
 import { isAddress } from "web3-utils";
 import axios from "axios";
 import env from "./env";
+import express from "express";
 
 interface Session {
   address?: string;
@@ -362,4 +363,17 @@ bot.on("callback_query", async (ctx) => {
 
 bot.catch((err) => console.error(err));
 
-bot.start();
+if (env.NODE_ENV === "production") {
+  // Use Webhooks for the production server
+  const app = express();
+  app.use(express.json());
+  app.use(webhookCallback(bot, "express"));
+
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Bot listening on port ${PORT}`);
+  });
+} else {
+  // Use Long Polling for development
+  bot.start();
+}
