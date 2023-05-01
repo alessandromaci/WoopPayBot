@@ -1,18 +1,7 @@
 import { Bot, InlineKeyboard } from "grammy";
 import { isAddress } from "web3-utils";
 import axios from "axios";
-// import dotenv from "dotenv";
-// dotenv.config({ path: `C:\Projects\WoopPayBot\.env` });
-// import { resolve } from "path";
-// import { config } from "dotenv";
-// const envFilePath = resolve(__dirname, "..", ".env");
-// const result = config({ path: envFilePath });
-
-// if (result.error) {
-//   throw result.error;
-// }
-
-// console.log(process.env);
+import env from "./env";
 
 interface Session {
   address?: string;
@@ -37,8 +26,7 @@ function getSession(ctx: any): Session {
   return session;
 }
 
-//const bot = new Bot(`${process.env.BOT_KEY}`);
-const bot = new Bot("5940096493:AAE_4flL-ab9YEH4MBQ9vrUyw-iJnTJw3xY");
+const bot = new Bot(env.BOT_KEY);
 
 const networkMenuMarkup = new InlineKeyboard()
   .text("Ethereum", "homestead")
@@ -97,13 +85,17 @@ bot.command("start", async (ctx) => {
   session.amount = undefined;
 
   await ctx.reply(
-    "Create cryptocurrency payment requests in just a few clicks.\n\n" +
-      "Join <a href='https://t.me/woop_pay'>our channel</a> and <a href='https://twitter.com/woop_pay'>our Twitter</a> to receive updates and learn more about our product.\n",
+    "Create cryptocurrency payment requests in just a few clicks!\n<a href='https://twitter.com/woop_pay'>Follow us on Twitter ></a>\n\n" +
+      "Join <a href='https://t.me/woop_pay'>our channel</a> to receive updates and learn more about our product.",
     { parse_mode: "HTML", disable_web_page_preview: true }
   );
-  await ctx.reply("Enter your wallet address to start receiving payments", {
-    parse_mode: "HTML",
-  });
+  await ctx.reply(
+    "<b>How to get started?</b>\n\nEnter your Ethereum wallet address in the chat to start receiving payments.\n\n<i>⚠️ If you are not familiar with wallet address, check this guide: <a href='https://ethereum.org/en/wallets/'>What's an Ethereum wallet?</a></i>",
+    {
+      parse_mode: "HTML",
+      disable_web_page_preview: true,
+    }
+  );
 });
 
 bot.command("settings", async (ctx) => {
@@ -150,10 +142,10 @@ bot.command("help", async (ctx) => {
   const session = getSession(ctx);
 
   await ctx.reply(
-    `Woop Pay Bot is a Telegram bot used to create cryptocurrency payment requests. It supports several EVM networks (Ethereum, Polygon, Arbitrum, and Optimism) as well as native and some of the most known ERC20 tokens. The bot is connected to our web application <a href='https://wooppay.xyz'>Woop Pay</a>. After entering the payment inputs, It will output a payment link with the required fields. By clicking the link, users will be redirected to the Woop Pay website where they can transfer the required amount.\nIf you require support, you can contact us via <a href='https://twitter.com/alerex_eth'>Twitter DM</a>`,
+    `<b>Woop Pay Bot</b> is used to create cryptocurrency payment requests. It supports several EVM networks (Ethereum, Polygon, Arbitrum, and Optimism) as well as native and some of the most known ERC20 tokens.\n\nThis bot is connected to our web application <a href='https://wooppay.xyz'>Woop Pay</a>. After entering the payment inputs, It will output a payment link with the required fields. By clicking the link, users will be redirected to the Woop Pay website where they can transfer the required amount.\n\nIf you need support, you can contact us via <a href='https://t.me/woop_pay'>our chat</a>`,
     {
-      reply_markup: settingMarkup,
       parse_mode: "HTML",
+      disable_web_page_preview: true,
     }
   );
   session.menuStep = 0;
@@ -176,12 +168,12 @@ bot.on("message:text", async (ctx) => {
       "Your wallet address is saved. You can now create a payment request using the command /create"
     );
   } else if (session.menuStep === 3) {
-    const action = ctx.callbackQuery?.data;
-    if (!Number.isFinite(+input) || +input <= 0) {
+    const inputWithDot = input.replace(",", ".");
+    if (!Number.isFinite(+inputWithDot) || +inputWithDot <= 0) {
       await ctx.reply("Invalid amount. Please try again.");
       return;
     }
-    session.amount = input;
+    session.amount = inputWithDot;
 
     const reviewText = `<b>Your wallet address:</b> ${
       session.address
@@ -211,7 +203,11 @@ bot.on("callback_query", async (ctx) => {
       await ctx.editMessageText("Enter your new wallet address");
     } else if (action === "contact") {
       await ctx.editMessageText(
-        "You can reach out to our team by using on the of the below options:\n-> <a href='https://twitter.com/alerex_eth'>Twitter DM</a>\n-> Mail to alessandro@wooppay.xyz"
+        "You can reach out to our team by joining <a href='https://t.me/woop_pay'>our chat</a>",
+        {
+          parse_mode: "HTML",
+          disable_web_page_preview: true,
+        }
       );
     }
   } else if (session.menuStep === 1) {
@@ -282,7 +278,7 @@ bot.on("callback_query", async (ctx) => {
       await ctx.editMessageText(
         `${reviewText}\n\nEnter the requested ${
           session.token == "back" ? "" : session.token
-        } amount in the message chat (Example: 0.03).\n`,
+        } amount in the message chat.\n`,
         {
           parse_mode: "HTML",
           reply_markup: inputMenuMarkup,
