@@ -1,8 +1,17 @@
 {
+  "name": "woop-pay-telegram-bot",
+  "version": "1.0.0",
+  "description": "Woop Pay Telegram Bot with TypeScript",
+  "main": "./bot.ts",
+  "engines": {
+    "node": "18.14",
+    "npm": "9.3.1"
+  },
   "scripts": {
     "start": "ts-node ./bot.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "author": "alessandromaci",
   "devDependencies": {
     "typescript": "^5.0.4"
   },
