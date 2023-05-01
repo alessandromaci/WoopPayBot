@@ -179,7 +179,11 @@ bot.on("message:text", async (ctx) => {
     const reviewText = `<b>Your wallet address:</b> ${
       session.address
     }\n<b>Requested network:</b> ${
-      session.network == "homestead" ? "Ethereum" : session.network
+      session.network == "homestead"
+        ? "Ethereum"
+        : session.network == "matic"
+        ? "Polygon"
+        : session.network
     }\n<b>Requested token:</b> ${session.token}\n<b>Requested amount:</b> ${
       session.amount
     }`;
@@ -226,14 +230,18 @@ bot.on("callback_query", async (ctx) => {
 
     //const { tokenMenuMarkup } = session.menuData;
     const token_menu =
-      session.network == "polygon"
+      session.network == "matic"
         ? PolygonTokenMenuMarkup
         : EthereumtokenMenuMarkup;
 
     const reviewText = `<b>Your wallet address:</b> ${
       session.address
     }\n<b>Requested network:</b> ${
-      session.network == "homestead" ? "Ethereum" : session.network
+      session.network == "homestead"
+        ? "Ethereum"
+        : session.network == "matic"
+        ? "Polygon"
+        : session.network
     }`;
 
     await ctx.editMessageText(
@@ -273,7 +281,11 @@ bot.on("callback_query", async (ctx) => {
       const reviewText = `${progressBarText}\n\n<b>Your wallet address:</b> ${
         session.address
       }\n<b>Requested network:</b> ${
-        session.network == "homestead" ? "Ethereum" : session.network
+        session.network == "homestead"
+          ? "Ethereum"
+          : session.network == "matic"
+          ? "Polygon"
+          : session.network
       }\n<b>Requested token:</b> ${session.token}`;
 
       await ctx.editMessageText(
@@ -292,13 +304,17 @@ bot.on("callback_query", async (ctx) => {
     const action = ctx.callbackQuery?.data;
     if (action == "back") {
       const token_menu =
-        session.network == "polygon"
+        session.network == "matic"
           ? PolygonTokenMenuMarkup
           : EthereumtokenMenuMarkup;
       const reviewText = `<b>Your wallet address:</b> ${
         session.address
       }\n<b>Requested network:</b> ${
-        session.network == "homestead" ? "Ethereum" : session.network
+        session.network == "homestead"
+          ? "Ethereum"
+          : session.network == "matic"
+          ? "Polygon"
+          : session.network
       }`;
 
       await ctx.editMessageText(
