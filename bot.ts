@@ -103,7 +103,7 @@ bot.command("settings", async (ctx) => {
   const session = getSession(ctx);
 
   await ctx.reply(
-    `⚙️ <b>Seetings</b>\n\nYour address: ${
+    `⚙️ <b>Settings</b>\n\nYour address: ${
       session.address ? session.address : "Not defined"
     }`,
     {
