@@ -91,7 +91,7 @@ bot.command("start", async (ctx) => {
     { parse_mode: "HTML", disable_web_page_preview: true }
   );
   await ctx.reply(
-    "<b>How to get started?</b>\n\nEnter your Ethereum wallet address in the chat to start receiving payments.\n\n<i>⚠️ If you are not familiar with wallet address, check this guide: <a href='https://ethereum.org/en/wallets/'>What's an Ethereum wallet?</a></i>",
+    "<b>How to get started?</b>\n\nEnter your Ethereum wallet address in the chat to start receiving payments.\n\n<i>⚠️ If you are not familiar with Ethereum wallet address, check this guide: <a href='https://ethereum.org/en/wallets/'>What's an Ethereum wallet?</a></i>",
     {
       parse_mode: "HTML",
       disable_web_page_preview: true,
@@ -159,7 +159,9 @@ bot.on("message:text", async (ctx) => {
 
   if (session.menuStep === 0) {
     if (!isAddress(input)) {
-      await ctx.reply("Invalid address. Please enter a valid wallet address.");
+      await ctx.reply(
+        "The address you entered is not valid. Please make sure you entered a correct Ethereum wallet address. An Ethereum wallet address starts with '0x' and consists of 42 characters."
+      );
       return;
     }
 
