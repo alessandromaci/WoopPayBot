@@ -118,7 +118,7 @@ bot.command("create", async (ctx) => {
 
   if (!session.address) {
     await ctx.reply(
-      "No address detected. Enter your wallet address to start receiving payments"
+      "No address detected. Enter your Ethereum wallet address to start receiving payments"
     );
   } else {
     await ctx.reply(
@@ -185,7 +185,11 @@ bot.on("message:text", async (ctx) => {
         ? "Ethereum"
         : session.network == "matic"
         ? "Polygon"
-        : session.network
+        : session.network == "goerli"
+        ? "Ethereum Goerli"
+        : session.network == "optimism"
+        ? "Optimism"
+        : "Arbitrum One"
     }\n<b>Requested token:</b> ${session.token}\n<b>Requested amount:</b> ${
       session.amount
     }`;
@@ -243,7 +247,11 @@ bot.on("callback_query", async (ctx) => {
         ? "Ethereum"
         : session.network == "matic"
         ? "Polygon"
-        : session.network
+        : session.network == "goerli"
+        ? "Ethereum Goerli"
+        : session.network == "optimism"
+        ? "Optimism"
+        : "Arbitrum One"
     }`;
 
     await ctx.editMessageText(
@@ -287,7 +295,11 @@ bot.on("callback_query", async (ctx) => {
           ? "Ethereum"
           : session.network == "matic"
           ? "Polygon"
-          : session.network
+          : session.network == "goerli"
+          ? "Ethereum Goerli"
+          : session.network == "optimism"
+          ? "Optimism"
+          : "Arbitrum One"
       }\n<b>Requested token:</b> ${session.token}`;
 
       await ctx.editMessageText(
@@ -316,7 +328,11 @@ bot.on("callback_query", async (ctx) => {
           ? "Ethereum"
           : session.network == "matic"
           ? "Polygon"
-          : session.network
+          : session.network == "goerli"
+          ? "Ethereum Goerli"
+          : session.network == "optimism"
+          ? "Optimism"
+          : "Arbitrum One"
       }`;
 
       await ctx.editMessageText(
