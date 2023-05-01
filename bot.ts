@@ -384,7 +384,7 @@ bot.on("callback_query", async (ctx) => {
       await ctx.answerCallbackQuery("Canceled");
       await ctx.deleteMessage();
       await ctx.reply(
-        "Payment request canceled! Create a new one using /start"
+        "Payment request canceled! Create a new one using /create"
       );
     } else {
       await ctx.answerCallbackQuery({
