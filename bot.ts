@@ -103,8 +103,11 @@ bot.command("settings", async (ctx) => {
   const session = getSession(ctx);
 
   await ctx.reply(
-    `Your address: ${session.address ? session.address : "Not defined"}`,
+    `⚙️ <b>Seetings</b>\n\nYour address: ${
+      session.address ? session.address : "Not defined"
+    }`,
     {
+      parse_mode: "HTML",
       reply_markup: settingMarkup,
     }
   );
@@ -202,7 +205,7 @@ bot.on("message:text", async (ctx) => {
     session.menuStep = 4;
   } else {
     await ctx.reply(
-      "Invalid text input. Please select one of the available options from the menu"
+      "I can help you create cryptocurrency payment requests.\n\nYou can manage me by sending this command:\n\n/create - start a new payment request"
     );
     return;
   }
@@ -216,7 +219,7 @@ bot.on("callback_query", async (ctx) => {
   if (session.menuStep === 0) {
     const action = ctx.callbackQuery?.data;
     if (action === "change_address") {
-      await ctx.editMessageText("Enter your new wallet address");
+      await ctx.editMessageText("Enter your new Ethereum wallet address");
     } else if (action === "contact") {
       await ctx.editMessageText(
         "You can reach out to our team by joining <a href='https://t.me/woop_pay'>our chat</a>",
