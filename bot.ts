@@ -143,7 +143,7 @@ bot.command("help", async (ctx) => {
   const session = getSession(ctx);
 
   await ctx.reply(
-    `<b>Woop Pay Bot</b> is used to create cryptocurrency payment requests. It supports several EVM networks (Ethereum, Polygon, Arbitrum, and Optimism) as well as native and some of the most known ERC20 tokens.\n\nThis bot is connected to our web application <a href='https://wooppay.xyz'>Woop Pay</a>. After entering the payment inputs, It will output a payment link with the required fields. By clicking the link, users will be redirected to the Woop Pay website where they can transfer the required amount.\n\nIf you need support, you can contact us via <a href='https://t.me/woop_pay'>our chat</a>`,
+    `<b>Woop Pay Bot</b> is used to create cryptocurrency payment requests. It supports several EVM networks (Ethereum, Polygon, Arbitrum, and Optimism) as well as native and some of the most known ERC20 tokens.\n\nThis bot is connected to our web application <a href='https://wooppay.xyz'>Woop Pay</a>. After entering the payment inputs, It will output a payment link with the required fields. By clicking the link, users will be redirected to the Woop Pay website where they can transfer the required amount.\n\nIf you need support, you can contact us via <a href='https://t.me/woop_pay'>our chat</a>\n\nUse the command /create to generate a new payment request`,
     {
       parse_mode: "HTML",
       disable_web_page_preview: true,
@@ -200,6 +200,11 @@ bot.on("message:text", async (ctx) => {
     });
 
     session.menuStep = 4;
+  } else {
+    await ctx.reply(
+      "Invalid text input. Please select one of the available options from the menu"
+    );
+    return;
   }
 });
 
