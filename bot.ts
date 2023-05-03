@@ -3,7 +3,7 @@ import { isAddress } from "web3-utils";
 import axios from "axios";
 import env from "./env";
 import express from "express";
-import qrcode from "qrcode";
+import QRCode from "qrcode";
 
 interface Session {
   address?: string;
@@ -377,7 +377,7 @@ bot.on("callback_query", async (ctx) => {
           "https://www.wooppay.xyz/api/create-woop",
           data
         );
-        const qrCode = await qrcode.toDataURL(response.data.result, {
+        const qrCode = await QRCode.toDataURL(response.data.result, {
           margin: 1,
           width: 512,
         });
