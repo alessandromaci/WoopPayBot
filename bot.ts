@@ -3,6 +3,7 @@ import { isAddress } from "web3-utils";
 import axios from "axios";
 import env from "./env";
 import express from "express";
+import qrcode from "qrcode";
 
 interface Session {
   address?: string;
@@ -39,7 +40,7 @@ const networkMenuMarkup = new InlineKeyboard()
   .text("Arbitrum One", "arbitrum")
   .row();
 
-const EthereumtokenMenuMarkup = new InlineKeyboard()
+const EthereumTokenMenuMarkup = new InlineKeyboard()
   .text("ETH", "ETH")
   .text("WETH", "WETH")
   .row()
@@ -104,7 +105,7 @@ bot.command("settings", async (ctx) => {
 
   await ctx.reply(
     `⚙️ <b>Settings</b>\n\nYour address: ${
-      session.address ? session.address : "Not defined"
+      session.address ? session.address : "No address found"
     }`,
     {
       parse_mode: "HTML",
@@ -135,7 +136,7 @@ bot.command("create", async (ctx) => {
     );
     session.menuData = {
       networkMenuMarkup,
-      EthereumtokenMenuMarkup,
+      EthereumTokenMenuMarkup,
       PolygonTokenMenuMarkup,
     };
     session.menuStep = 1;
@@ -246,7 +247,7 @@ bot.on("callback_query", async (ctx) => {
     const token_menu =
       session.network == "matic"
         ? PolygonTokenMenuMarkup
-        : EthereumtokenMenuMarkup;
+        : EthereumTokenMenuMarkup;
 
     const reviewText = `<b>Your wallet address:</b> ${
       session.address
@@ -328,7 +329,7 @@ bot.on("callback_query", async (ctx) => {
       const token_menu =
         session.network == "matic"
           ? PolygonTokenMenuMarkup
-          : EthereumtokenMenuMarkup;
+          : EthereumTokenMenuMarkup;
       const reviewText = `<b>Your wallet address:</b> ${
         session.address
       }\n<b>Requested network:</b> ${
@@ -376,12 +377,21 @@ bot.on("callback_query", async (ctx) => {
           "https://www.wooppay.xyz/api/create-woop",
           data
         );
+        const qrCode = await qrcode.toDataURL(response.data.result, {
+          margin: 1,
+          width: 512,
+        });
         await ctx.editMessageText(
           `🎉🎉🎉\n\n<b>Payment request generated:</b> ${response.data.result}`,
           {
             parse_mode: "HTML",
+            disable_web_page_preview: true,
           }
         );
+        await ctx.replyWithPhoto(qrCode, {
+          caption: "Scan the QR code to view the payment request",
+          parse_mode: "HTML",
+        });
       } catch (err) {
         console.error("Error generating payment request:", err);
         await ctx.reply(
