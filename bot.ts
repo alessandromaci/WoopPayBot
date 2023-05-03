@@ -3,7 +3,7 @@ import { isAddress } from "web3-utils";
 import axios from "axios";
 import env from "./env";
 import express from "express";
-import QRCode from "qrcode";
+//import QRCode from "qrcode";
 
 interface Session {
   address?: string;
@@ -377,10 +377,10 @@ bot.on("callback_query", async (ctx) => {
           "https://www.wooppay.xyz/api/create-woop",
           data
         );
-        const qrCode = await QRCode.toDataURL(response.data.result, {
-          margin: 1,
-          width: 512,
-        });
+        // const qrCode = await QRCode.toDataURL(response.data.result, {
+        //   margin: 1,
+        //   width: 512,
+        // });
         await ctx.editMessageText(
           `🎉🎉🎉\n\n<b>Payment request generated:</b> ${response.data.result}`,
           {
@@ -388,10 +388,10 @@ bot.on("callback_query", async (ctx) => {
             disable_web_page_preview: true,
           }
         );
-        await ctx.replyWithPhoto(qrCode, {
-          caption: "Scan the QR code to view the payment request",
-          parse_mode: "HTML",
-        });
+        // await ctx.replyWithPhoto(qrCode, {
+        //   caption: "Scan the QR code to view the payment request",
+        //   parse_mode: "HTML",
+        // });
       } catch (err) {
         console.error("Error generating payment request:", err);
         await ctx.reply(
