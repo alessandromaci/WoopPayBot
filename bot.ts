@@ -375,7 +375,13 @@ bot.on("callback_query", async (ctx) => {
       try {
         const response = await axios.post(
           "https://www.wooppay.xyz/api/create-woop",
-          data
+          data,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
         );
         // const qrCode = await QRCode.toDataURL(response.data.result, {
         //   margin: 1,
